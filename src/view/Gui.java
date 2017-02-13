@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Created by Gubanov Pavel on 19.12.16.
  */
-class Gui extends JFrame {
+public class Gui extends JFrame implements FightObserver {
 
     private JButton buttonSetTeamNames;
     private JButton buttonAddWarrior;

@@ -3,7 +3,7 @@ package model;
 /**
  * Created by Gubanov Pavel on 06.01.17.
  */
-enum Singleton {
+public enum Singleton {
     INSTANCE;
 
     private final Initializer init;

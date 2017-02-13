@@ -1,9 +1,9 @@
-package model;
+package model.Warriors;
 
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-class Viking extends AbstractWarrior implements Warrior {
+public class Viking extends AbstractWarrior implements Warrior {
 
     private static final int VIKING_HEALTH = 120;
     private static final int VIKING_DAMAGE = 50;

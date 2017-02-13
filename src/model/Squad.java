@@ -1,5 +1,7 @@
 package model;
 
+import model.Warriors.Warrior;
+
 import java.util.List;
 
 /**

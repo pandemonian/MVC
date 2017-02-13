@@ -1,4 +1,4 @@
-package model;
+package model.Warriors;
 
 /**
  * Created by Gubanov Pavel on 02.01.17.

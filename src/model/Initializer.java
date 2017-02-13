@@ -1,5 +1,10 @@
 package model;
 
+import model.Warriors.Archer;
+import model.Warriors.Barbarian;
+import model.Warriors.Viking;
+import model.Warriors.Warrior;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -91,15 +96,15 @@ class Initializer {
         switch (indexTypeWarrior) {
             case 0:
                 currentTeam.add(new Viking(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Viking";
+                currentTypeWarrior = "model.Warriors.Viking";
                 break;
             case 1:
                 currentTeam.add(new Archer(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Archer";
+                currentTypeWarrior = "model.Warriors.Archer";
                 break;
             case 2:
                 currentTeam.add(new Barbarian(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Barbarian";
+                currentTypeWarrior = "model.Warriors.Barbarian";
                 break;
         }
 
