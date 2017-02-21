@@ -1,6 +1,8 @@
 package view;
 
+import controller.FightController;
 import model.Battle;
+import model.FightModel;
 import model.Singleton;
 
 import javax.swing.*;
@@ -12,6 +14,8 @@ import java.util.Arrays;
  */
 public class Gui extends JFrame implements FightObserver {
 
+    private FightController controller;
+    private FightModel model;
     private JButton buttonSetTeamNames;
     private JButton buttonAddWarrior;
     private JButton buttonStartFight;
@@ -27,12 +31,14 @@ public class Gui extends JFrame implements FightObserver {
     private static StringBuilder strBldrSecondWarriorList = new StringBuilder();
     private static StringBuilder strBldrLog = new StringBuilder();
 
-    Gui() {
+    Gui(FightModel model) {
         super("Приложение \"Битва\"");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setVisible(true);
         initComponents();
+        addListeners();
+        this.model = model;
     }
 
     private void initComponents() {
@@ -82,9 +88,16 @@ public class Gui extends JFrame implements FightObserver {
         bottomPanel.add(log);
             log.setEditable(false);
 
+        add(bottomPanel, BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
+        pack();
+    }
 
+    private void addListeners() {
         buttonSetTeamNames.addActionListener(e -> {
-            Singleton.INSTANCE.getInit().initNameTeams();
+            //Singleton.INSTANCE.getInit().initNameTeams();
+            initNameTeams();
             buttonSetTeamNames.setEnabled(false);
             buttonAddWarrior.setEnabled(true);
         });
@@ -100,12 +113,6 @@ public class Gui extends JFrame implements FightObserver {
             buttonStartFight.setEnabled(false);
 
         });
-
-
-        add(bottomPanel, BorderLayout.SOUTH);
-        add(centerPanel, BorderLayout.CENTER);
-        add(topPanel, BorderLayout.NORTH);
-        pack();
     }
 
     static String getFieldFirstNameTeam() {
@@ -138,11 +145,44 @@ public class Gui extends JFrame implements FightObserver {
         fieldSecondTeamWarriorList.setText(strBldrSecondWarriorList.toString());
     }
 
-    static void setLog(String ... arg) {
+    /*static void setLog(String ... arg) {
         Arrays.stream(arg)
                 .forEach(t-> strBldrLog.append(t));
         strBldrLog.append("\n");
         log.setText(strBldrLog.toString());
+    }*/
+
+    /////  verify methods of Initializer  /////////
+
+    void initNameTeams() {
+        String inputStr;
+
+        inputStr = getFieldFirstNameTeam();
+        if (!inputStr.equals("")) {
+
+            controller.relayTeam1Name(inputStr);
+            log.setText("Название первого отряда: " + inputStr);
+        }
+        else {
+            log.setText("Ничего не введено, указано название первого отряда по-умолчанию - England");
+            controller.relayTeam1Name("England");
+        }
+
+        inputStr = getFieldSecondNameTeam();
+        if ((!inputStr.equals("")) && (!inputStr.equals(model.getTeam1Name()))) {
+            log.setText("Название второго отряда: " + inputStr);
+        }
+        else {
+            log.setText("Ничего не введено, либо указано имя первого отряда. Присвоено название второго " +
+                    "отряда по-умолчанию - France");
+            controller.relayTeam2Name("France");
+        }
     }
 
+    /////  verify methods of Initializer  /////////
+
+    @Override
+    public void updateView(StringBuilder msg) {
+        log.setText(msg.toString());
+    }
 }

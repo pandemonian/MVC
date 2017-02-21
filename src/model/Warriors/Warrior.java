@@ -3,7 +3,7 @@ package model.Warriors;
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-interface Warrior extends Cloneable {
+public interface Warrior extends Cloneable {
 
     int attack();
     default void attackingUnit(Warrior unit) {
