@@ -1,5 +1,8 @@
 package model;
 
+import model.Warriors.Archer;
+import model.Warriors.Barbarian;
+import model.Warriors.Viking;
 import model.Warriors.Warrior;
 import view.FightObserver;
 
@@ -106,19 +109,6 @@ public class Battle implements FightModel {
         notifyObserver();
     }
 
-    void startBattle() {
-        Squad squad1 = new Squad(init.getTeam1Name(), init.getTeam1());
-        Squad squad2 = new Squad(init.getTeam2Name(), init.getTeam2());
-
-        msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate());
-        notifyObserver();
-
-        startFight(squad1, squad2);
-
-        msg.append("Бой продолжался: ").append(DataHelper.getFormattedDiff());
-        notifyObserver();
-    }
-
     private void startFight(Squad squad1, Squad squad2) {
 
         while (true) {
@@ -166,6 +156,19 @@ public class Battle implements FightModel {
     }
 
 
+    public void startBattle() {
+        Squad squad1 = new Squad(team1Name, team1);
+        Squad squad2 = new Squad(team2Name, team2);
+
+        msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate());
+        notifyObserver();
+
+        startFight(squad1, squad2);
+
+        msg.append("Бой продолжался: ").append(DataHelper.getFormattedDiff());
+        notifyObserver();
+    }
+
     public void initNameTeams(String team1Name, String team2Name) {
         if (!team1Name.equals("")) {
             this.team1Name = team1Name;
@@ -188,5 +191,51 @@ public class Battle implements FightModel {
         }
     }
 
-    
+    @Override
+    public void initNameAndTypeWarriors(String nameWarrior, int indexTeam, int indexTypeWarrior) {
+        // реализовать передачу и обработку параметров в методе
+        List<Warrior> currentTeam = null;
+        String currentTeamName = "";
+        String currentTypeWarrior = "";
+        String nameWarrior = Gui.getFieldNameWarrior(); //parametr
+        int indexTeam = Gui.getComboBoxTeam(); //parametr
+        int indexTypeWarrior = Gui.getComboBoxTypeWarrior(); //parametr
+
+        if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
+
+        switch (indexTeam) {
+            case 0:
+                currentTeam = team1;
+                currentTeamName = team1Name;
+                break;
+            case 1:
+                currentTeam = team2;
+                currentTeamName = team2Name;
+                break;
+        }
+
+        switch (indexTypeWarrior) {
+            case 0:
+                currentTeam.add(new Viking(nameWarrior, currentTeamName));
+                currentTypeWarrior = "model.Warriors.Viking";
+                break;
+            case 1:
+                currentTeam.add(new Archer(nameWarrior, currentTeamName));
+                currentTypeWarrior = "model.Warriors.Archer";
+                break;
+            case 2:
+                currentTeam.add(new Barbarian(nameWarrior, currentTeamName));
+                currentTypeWarrior = "model.Warriors.Barbarian";
+                break;
+        }
+
+        switch (indexTeam) {
+            case 0:
+                Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
+                break;
+            case 1:
+                Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
+                break;
+        }
+    }
 }

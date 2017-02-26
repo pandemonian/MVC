@@ -24,37 +24,17 @@ public class FightControllerImpl implements FightController {
     }
 
     @Override
-    public void initNameAndTypeWarriors() {
-
+    public void initNameAndTypeWarriors(String nameWarrior, int indexTeam, int indexTypeWarrior) {
+        model.initNameAndTypeWarriors(nameWarrior, indexTeam, indexTypeWarrior);
     }
 
     @Override
     public boolean isTeamsNotEmpty() {
-        model.isTeamsNotEmpty();
+        return model.isTeamsNotEmpty();
     }
 
     @Override
     public void startBattle() {
         model.startBattle();
-    }
-
-    @Override
-    public void relayTeam1Name(String team1Name) {
-        model.setTeam1Name(team1Name);
-    }
-
-    @Override
-    public void relayTeam2Name(String team2Name) {
-        model.setTeam2Name(team2Name);
-    }
-
-    @Override
-    public void relayTeam1(List<Warrior> team1) {
-        model.setTeam1(team1);
-    }
-
-    @Override
-    public void relayTeam2(List<Warrior> team2) {
-        model.setTeam2(team2);
     }
 }
