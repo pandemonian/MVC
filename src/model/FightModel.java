@@ -15,13 +15,8 @@ public interface FightModel {
     void registerObserver(FightObserver o);
     void notifyObserver();
 
-    void setTeam1Name(String team1Name);
-    void setTeam2Name(String team2Name);
-    void setTeam1(List<Warrior> team1);
-    void setTeam2(List<Warrior> team2);
-
-    String getTeam1Name();
-    String getTeam2Name();
-    List<Warrior> getTeam1();
-    List<Warrior> getTeam2();
+    void initNameTeams(String team1Name, String team2Name);
+    void initNameAndTypeWarriors();
+    void startBattle();
+    boolean isTeamsNotEmpty();
 }

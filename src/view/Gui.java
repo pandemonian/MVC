@@ -96,30 +96,30 @@ public class Gui extends JFrame implements FightObserver {
 
     private void addListeners() {
         buttonSetTeamNames.addActionListener(e -> {
-            //Singleton.INSTANCE.getInit().initNameTeams();
-            initNameTeams();
+            controller.initNameTeams(fieldFirstNameTeam.getText(), fieldSecondNameTeam.getText());
             buttonSetTeamNames.setEnabled(false);
             buttonAddWarrior.setEnabled(true);
         });
 
         buttonAddWarrior.addActionListener(e -> {
-            Singleton.INSTANCE.getInit().initNameAndTypeWarriors();
-            if (Singleton.INSTANCE.getInit().isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
+            controller.initNameAndTypeWarriors();
+            if (controller.isTeamsNotEmpty()) {
+                buttonStartFight.setEnabled(true);
+            }
         });
 
         buttonStartFight.addActionListener(e -> {
-            new Battle().startBattle();
+            controller.startBattle();
             buttonAddWarrior.setEnabled(false);
             buttonStartFight.setEnabled(false);
-
         });
     }
 
-    static String getFieldFirstNameTeam() {
+    private String getFieldFirstNameTeam() {
         return fieldFirstNameTeam.getText();
     }
 
-    static String getFieldSecondNameTeam() {
+    private String getFieldSecondNameTeam() {
         return fieldSecondNameTeam.getText();
     }
 
@@ -145,41 +145,6 @@ public class Gui extends JFrame implements FightObserver {
         fieldSecondTeamWarriorList.setText(strBldrSecondWarriorList.toString());
     }
 
-    /*static void setLog(String ... arg) {
-        Arrays.stream(arg)
-                .forEach(t-> strBldrLog.append(t));
-        strBldrLog.append("\n");
-        log.setText(strBldrLog.toString());
-    }*/
-
-    /////  verify methods of Initializer  /////////
-
-    void initNameTeams() {
-        String inputStr;
-
-        inputStr = getFieldFirstNameTeam();
-        if (!inputStr.equals("")) {
-
-            controller.relayTeam1Name(inputStr);
-            log.setText("Название первого отряда: " + inputStr);
-        }
-        else {
-            log.setText("Ничего не введено, указано название первого отряда по-умолчанию - England");
-            controller.relayTeam1Name("England");
-        }
-
-        inputStr = getFieldSecondNameTeam();
-        if ((!inputStr.equals("")) && (!inputStr.equals(model.getTeam1Name()))) {
-            log.setText("Название второго отряда: " + inputStr);
-        }
-        else {
-            log.setText("Ничего не введено, либо указано имя первого отряда. Присвоено название второго " +
-                    "отряда по-умолчанию - France");
-            controller.relayTeam2Name("France");
-        }
-    }
-
-    /////  verify methods of Initializer  /////////
 
     @Override
     public void updateView(StringBuilder msg) {

@@ -43,9 +43,7 @@ class Initializer {
         return warriorName[index];
     }
 
-    boolean isTeamsNotEmpty() {
-        return ((team1.size() > 0) && (team2.size() > 0));
-    }
+
 
     void initNameTeams() {
         String inputStr;

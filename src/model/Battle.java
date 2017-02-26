@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-class Battle implements FightModel {
+public class Battle implements FightModel {
 
     private FightObserver observer;
     private Initializer init;
@@ -54,10 +54,12 @@ class Battle implements FightModel {
         return team2;
     }
 
+
     Battle (Initializer init) {
         this.init = init;
         this.msg = new StringBuilder(0);
     }
+
 
     @Override
     public void registerObserver(FightObserver o) {
@@ -73,6 +75,10 @@ class Battle implements FightModel {
     //возвращает true если только в одном из отрядов не осталось живых бойцов.
     private boolean isAnyLoose(Squad crew1, Squad crew2) {
         return (!crew1.hasAliveWarriors()) ^ (!crew2.hasAliveWarriors());
+    }
+
+    public boolean isTeamsNotEmpty() {
+        return ((team1.size() > 0) && (team2.size() > 0));
     }
 
     private int getRandomIndexWarriorTeam(Squad crew) {
@@ -98,7 +104,6 @@ class Battle implements FightModel {
 
         msg.append("Отряд ").append(winner).append(" победил, уничтожив отряд ").append(looser);
         notifyObserver();
-        //Gui.setLog("Отряд \"", winner, "\" победил, ", "уничтожив отряд \"", looser, "\"");
     }
 
     void startBattle() {
@@ -107,13 +112,11 @@ class Battle implements FightModel {
 
         msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate());
         notifyObserver();
-        //Gui.setLog("Битва началась!!! ", DataHelper.getFormattedStartDate());
 
         startFight(squad1, squad2);
 
         msg.append("Бой продолжался: ").append(DataHelper.getFormattedDiff());
         notifyObserver();
-        //Gui.setLog("Бой продолжался: ", DataHelper.getFormattedDiff());
     }
 
     private void startFight(Squad squad1, Squad squad2) {
@@ -151,11 +154,39 @@ class Battle implements FightModel {
 
             crew1.getTeamWarrior(indexWarriorTeam1).attackingUnit(crew2.getTeamWarrior(indexWarriorTeam2));
 
-            /*Gui.setLog(crew1.getTeamWarrior(indexWarriorTeam1).getClass().getSimpleName(), " ", crew1.getTeamWarrior(indexWarriorTeam1).getName(),
-                    " из отряда \"", crew1.getName(), "\" нанёс ", crew2.getTeamWarrior(indexWarriorTeam2).getClass().getSimpleName(),
-                    "`у ", crew2.getTeamWarrior(indexWarriorTeam2).getName(), " из отряда \"", crew2.getName(), "\" ",
-                    String.valueOf(crew1.getTeamWarrior(indexWarriorTeam1).getDamage()), " единиц урона!");*/
-
+            msg.append(crew1.getTeamWarrior(indexWarriorTeam1).getClass().getSimpleName()).append(" ")
+                    .append(crew1.getTeamWarrior(indexWarriorTeam1).getName()).append(" из отряда \"")
+                    .append(crew1.getName()).append("\" нанёс ")
+                    .append(crew2.getTeamWarrior(indexWarriorTeam2).getClass().getSimpleName())
+                    .append("`у ").append(crew2.getTeamWarrior(indexWarriorTeam2).getName()).append(" из отряда \"")
+                    .append(crew2.getName()).append("\" ").append("\" ")
+                    .append(String.valueOf(crew1.getTeamWarrior(indexWarriorTeam1).getDamage())).append(" единиц урона!");
+            notifyObserver();
         }
     }
+
+
+    public void initNameTeams(String team1Name, String team2Name) {
+        if (!team1Name.equals("")) {
+            this.team1Name = team1Name;
+            msg.append("Название первого отряда: ").append(this.team1Name);
+            notifyObserver();
+        } else {
+            this.team1Name = "England";
+            msg.append("Ничего не введено, указано название первого отряда по-умолчанию - England");
+            notifyObserver();
+        }
+
+        if ((!team2Name.equals("")) && (!team2Name.equals(this.team1Name))) {
+            this.team2Name = team2Name;
+            msg.append("Название второго отряда: ").append(this.team2Name);
+            notifyObserver();
+        } else {
+            this.team2Name = "France";
+            msg.append("Ничего не введено, либо указано имя первого отряда. Присвоено название второго отряда по-умолчанию - France");
+            notifyObserver();
+        }
+    }
+
+    
 }
