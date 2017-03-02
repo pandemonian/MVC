@@ -16,7 +16,6 @@ import java.util.Random;
 public class Battle implements FightModel {
 
     private FightObserver observer;
-    private Initializer init;
     private Random random;
     private StringBuilder msg;
 
@@ -24,8 +23,10 @@ public class Battle implements FightModel {
     private String team2Name;
     private List<Warrior> team1 = new ArrayList<>();
     private List<Warrior> team2 = new ArrayList<>();
+    private String[] warriorName = {"Adar", "Abner", "Alford", "Bennett", "Ward", "Wild",
+            "Irk", "Kellen", "Odin"};
 
-    public void setTeam1Name(String team1Name) {
+    /*public void setTeam1Name(String team1Name) {
         this.team1Name = team1Name;
     }
 
@@ -55,11 +56,10 @@ public class Battle implements FightModel {
 
     public List<Warrior> getTeam2() {
         return team2;
-    }
+    }*/
 
 
-    Battle (Initializer init) {
-        this.init = init;
+    Battle () {
         this.msg = new StringBuilder(0);
     }
 
@@ -73,6 +73,11 @@ public class Battle implements FightModel {
     public void notifyObserver() {
         observer.updateView(msg);
         msg.delete(0, msg.length());
+    }
+
+    private String getRandomNameWarrior() {
+        int index = random.nextInt(warriorName.length);
+        return warriorName[index];
     }
 
     //возвращает true если только в одном из отрядов не осталось живых бойцов.
@@ -192,14 +197,14 @@ public class Battle implements FightModel {
     }
 
     @Override
-    public void initNameAndTypeWarriors(String nameWarrior, int indexTeam, int indexTypeWarrior) {
+    public void initNameAndTypeWarriors(String nameWarriorArg, int indexTeamArg, int indexTypeWarriorArg) {
         // реализовать передачу и обработку параметров в методе
         List<Warrior> currentTeam = null;
         String currentTeamName = "";
         String currentTypeWarrior = "";
-        String nameWarrior = Gui.getFieldNameWarrior(); //parametr
-        int indexTeam = Gui.getComboBoxTeam(); //parametr
-        int indexTypeWarrior = Gui.getComboBoxTypeWarrior(); //parametr
+        String nameWarrior = nameWarriorArg; //parametr
+        int indexTeam = indexTeamArg; //parametr
+        int indexTypeWarrior = indexTypeWarriorArg; //parametr
 
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
 
@@ -217,7 +222,7 @@ public class Battle implements FightModel {
         switch (indexTypeWarrior) {
             case 0:
                 currentTeam.add(new Viking(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Warriors.Viking";
+                currentTypeWarrior = "Viking";
                 break;
             case 1:
                 currentTeam.add(new Archer(nameWarrior, currentTeamName));

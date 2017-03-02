@@ -102,7 +102,8 @@ public class Gui extends JFrame implements FightObserver {
         });
 
         buttonAddWarrior.addActionListener(e -> {
-            controller.initNameAndTypeWarriors();
+            controller.initNameAndTypeWarriors(fieldNameWarrior.getText(), comboBoxTeam.getSelectedIndex(),
+                    comboBoxTypeWarrior.getSelectedIndex());
             if (controller.isTeamsNotEmpty()) {
                 buttonStartFight.setEnabled(true);
             }
