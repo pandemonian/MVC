@@ -17,7 +17,10 @@ public class Battle implements FightModel {
 
     private FightObserver observer;
     private Random random;
+
     private StringBuilder msg;
+    private StringBuilder team1WarriorName;
+    private StringBuilder team2WarriorName;
 
     private String team1Name;
     private String team2Name;
@@ -26,41 +29,11 @@ public class Battle implements FightModel {
     private String[] warriorName = {"Adar", "Abner", "Alford", "Bennett", "Ward", "Wild",
             "Irk", "Kellen", "Odin"};
 
-    /*public void setTeam1Name(String team1Name) {
-        this.team1Name = team1Name;
-    }
 
-    public void setTeam2Name(String team2Name) {
-        this.team2Name = team2Name;
-    }
-
-    public void setTeam1(List<Warrior> team1) {
-        this.team1 = team1;
-    }
-
-    public void setTeam2(List<Warrior> team2) {
-        this.team2 = team2;
-    }
-
-    public String getTeam1Name() {
-        return team1Name;
-    }
-
-    public String getTeam2Name() {
-        return team2Name;
-    }
-
-    public List<Warrior> getTeam1() {
-        return team1;
-    }
-
-    public List<Warrior> getTeam2() {
-        return team2;
-    }*/
-
-
-    Battle () {
-        this.msg = new StringBuilder(0);
+    public Battle () {
+        msg = new StringBuilder(0);
+        team1WarriorName = new StringBuilder(0);
+        team2WarriorName = new StringBuilder(0);
     }
 
 
@@ -71,8 +44,10 @@ public class Battle implements FightModel {
 
     @Override
     public void notifyObserver() {
-        observer.updateView(msg);
+        observer.updateView(msg, team1WarriorName, team2WarriorName);
         msg.delete(0, msg.length());
+        team1WarriorName.delete(0, team1WarriorName.length());
+        team2WarriorName.delete(0, team2WarriorName.length());
     }
 
     private String getRandomNameWarrior() {
@@ -203,12 +178,12 @@ public class Battle implements FightModel {
         String currentTeamName = "";
         String currentTypeWarrior = "";
         String nameWarrior = nameWarriorArg; //parametr
-        int indexTeam = indexTeamArg; //parametr
-        int indexTypeWarrior = indexTypeWarriorArg; //parametr
+        //int indexTeam = indexTeamArg; //parametr
+        //int indexTypeWarrior = indexTypeWarriorArg; //parametr
 
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
 
-        switch (indexTeam) {
+        switch (indexTeamArg) {
             case 0:
                 currentTeam = team1;
                 currentTeamName = team1Name;
@@ -219,27 +194,29 @@ public class Battle implements FightModel {
                 break;
         }
 
-        switch (indexTypeWarrior) {
+        switch (indexTypeWarriorArg) {
             case 0:
                 currentTeam.add(new Viking(nameWarrior, currentTeamName));
                 currentTypeWarrior = "Viking";
                 break;
             case 1:
                 currentTeam.add(new Archer(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Warriors.Archer";
+                currentTypeWarrior = "Archer";
                 break;
             case 2:
                 currentTeam.add(new Barbarian(nameWarrior, currentTeamName));
-                currentTypeWarrior = "model.Warriors.Barbarian";
+                currentTypeWarrior = "Barbarian";
                 break;
         }
 
-        switch (indexTeam) {
+        switch (indexTeamArg) {
             case 0:
-                Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
+                //Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
+                team1WarriorName.append(nameWarrior).append(currentTypeWarrior);
                 break;
             case 1:
-                Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
+                //Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
+                team2WarriorName.append(nameWarrior).append(currentTypeWarrior);
                 break;
         }
     }

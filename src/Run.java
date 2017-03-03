@@ -1,3 +1,6 @@
+import controller.FightController;
+import controller.FightControllerImpl;
+import model.Battle;
 import view.Gui;
 
 /**
@@ -6,7 +9,8 @@ import view.Gui;
 public class Run {
 
     public static void main(String[] args) {
-        //new Gui();
-
+        Battle battle = new Battle();
+        FightController controller = new FightControllerImpl(battle);
+        Gui gui = new Gui(controller);
     }
 }

@@ -7,5 +7,5 @@ package view;
 //Observer
 //методы для обновления UI
 public interface FightObserver {
-    void updateView(StringBuilder msg);
+    void updateView(StringBuilder msg, StringBuilder team1WarriorName, StringBuilder team2WarriorName);
 }

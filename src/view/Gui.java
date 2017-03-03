@@ -1,13 +1,10 @@
 package view;
 
 import controller.FightController;
-import model.Battle;
 import model.FightModel;
-import model.Singleton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * Created by Gubanov Pavel on 19.12.16.
@@ -15,7 +12,6 @@ import java.util.Arrays;
 public class Gui extends JFrame implements FightObserver {
 
     private FightController controller;
-    private FightModel model;
     private JButton buttonSetTeamNames;
     private JButton buttonAddWarrior;
     private JButton buttonStartFight;
@@ -31,14 +27,14 @@ public class Gui extends JFrame implements FightObserver {
     private static StringBuilder strBldrSecondWarriorList = new StringBuilder();
     private static StringBuilder strBldrLog = new StringBuilder();
 
-    Gui(FightModel model) {
+    public Gui(FightController controller) {
         super("Приложение \"Битва\"");
+        this.controller = controller;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setVisible(true);
         initComponents();
         addListeners();
-        this.model = model;
     }
 
     private void initComponents() {
@@ -148,7 +144,10 @@ public class Gui extends JFrame implements FightObserver {
 
 
     @Override
-    public void updateView(StringBuilder msg) {
+    public void updateView(StringBuilder msg, StringBuilder team1WarriorName, StringBuilder team2WarriorName) {
         log.setText(msg.toString());
+        fieldFirstTeamWarriorList.setText(team1WarriorName.toString());
+        fieldSecondTeamWarriorList.setText(team2WarriorName.toString());
+
     }
 }

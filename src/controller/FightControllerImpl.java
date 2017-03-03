@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class FightControllerImpl implements FightController {
     private FightModel model;
-    private Gui view;
+    //private Gui view;
 
-    public FightControllerImpl(FightModel model, Gui view) {
+    public FightControllerImpl(FightModel model) {
         this.model = model;
-        this.view = view;
+        //this.view = view;
     }
 
     @Override
