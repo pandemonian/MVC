@@ -11,6 +11,6 @@ public class Run {
     public static void main(String[] args) {
         Battle battle = new Battle();
         FightController controller = new FightControllerImpl(battle);
-        Gui gui = new Gui(controller);
+        Gui gui = new Gui(controller, battle);
     }
 }

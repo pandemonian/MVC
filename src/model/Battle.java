@@ -45,9 +45,9 @@ public class Battle implements FightModel {
     @Override
     public void notifyObserver() {
         observer.updateView(msg, team1WarriorName, team2WarriorName);
-        msg.delete(0, msg.length());
-        team1WarriorName.delete(0, team1WarriorName.length());
-        team2WarriorName.delete(0, team2WarriorName.length());
+        //msg.delete(0, msg.length());
+        //team1WarriorName.delete(0, team1WarriorName.length());
+        //team2WarriorName.delete(0, team2WarriorName.length());
     }
 
     private String getRandomNameWarrior() {
@@ -152,7 +152,7 @@ public class Battle implements FightModel {
     public void initNameTeams(String team1Name, String team2Name) {
         if (!team1Name.equals("")) {
             this.team1Name = team1Name;
-            msg.append("Название первого отряда: ").append(this.team1Name);
+            msg.append("Название первого отряда: ").append(this.team1Name).append("\n");
             notifyObserver();
         } else {
             this.team1Name = "England";
@@ -162,7 +162,7 @@ public class Battle implements FightModel {
 
         if ((!team2Name.equals("")) && (!team2Name.equals(this.team1Name))) {
             this.team2Name = team2Name;
-            msg.append("Название второго отряда: ").append(this.team2Name);
+            msg.append("Название второго отряда: ").append(this.team2Name).append("\n");
             notifyObserver();
         } else {
             this.team2Name = "France";
@@ -212,11 +212,11 @@ public class Battle implements FightModel {
         switch (indexTeamArg) {
             case 0:
                 //Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
-                team1WarriorName.append(nameWarrior).append(currentTypeWarrior);
+                team1WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 break;
             case 1:
                 //Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
-                team2WarriorName.append(nameWarrior).append(currentTypeWarrior);
+                team2WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 break;
         }
     }

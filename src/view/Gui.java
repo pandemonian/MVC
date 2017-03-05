@@ -27,7 +27,7 @@ public class Gui extends JFrame implements FightObserver {
     private static StringBuilder strBldrSecondWarriorList = new StringBuilder();
     private static StringBuilder strBldrLog = new StringBuilder();
 
-    public Gui(FightController controller) {
+    public Gui(FightController controller, FightModel model) {
         super("Приложение \"Битва\"");
         this.controller = controller;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -35,6 +35,7 @@ public class Gui extends JFrame implements FightObserver {
         setVisible(true);
         initComponents();
         addListeners();
+        model.registerObserver(this);
     }
 
     private void initComponents() {
@@ -49,7 +50,7 @@ public class Gui extends JFrame implements FightObserver {
         fieldFirstTeamWarriorList = new TextArea(10, 15);
         fieldSecondTeamWarriorList = new TextArea(10, 15);
         comboBoxTeam = new JComboBox<>(new String[] {"Первая команда", "Вторая команда"});
-        comboBoxTypeWarrior = new JComboBox<>(new String[] {"model.Viking", "model.Archer", "model.Barbarian"});
+        comboBoxTypeWarrior = new JComboBox<>(new String[] {"Viking", "Archer", "Barbarian"});
         log = new TextArea(20, 90);
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
