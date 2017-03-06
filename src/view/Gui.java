@@ -146,9 +146,8 @@ public class Gui extends JFrame implements FightObserver {
 
     @Override
     public void updateView(StringBuilder msg, StringBuilder team1WarriorName, StringBuilder team2WarriorName) {
-        log.setText(msg.toString());
-        fieldFirstTeamWarriorList.setText(team1WarriorName.toString());
-        fieldSecondTeamWarriorList.setText(team2WarriorName.toString());
-
+        log.append(msg.toString());
+        fieldFirstTeamWarriorList.append(team1WarriorName.toString());
+        fieldSecondTeamWarriorList.append(team2WarriorName.toString());
     }
 }

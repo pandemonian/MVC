@@ -24,13 +24,16 @@ public class Battle implements FightModel {
 
     private String team1Name;
     private String team2Name;
-    private List<Warrior> team1 = new ArrayList<>();
-    private List<Warrior> team2 = new ArrayList<>();
+    private List<Warrior> team1;
+    private List<Warrior> team2;
     private String[] warriorName = {"Adar", "Abner", "Alford", "Bennett", "Ward", "Wild",
             "Irk", "Kellen", "Odin"};
 
 
     public Battle () {
+        random = new Random();
+        team1 = new ArrayList<>();
+        team2 = new ArrayList<>();
         msg = new StringBuilder(0);
         team1WarriorName = new StringBuilder(0);
         team2WarriorName = new StringBuilder(0);
@@ -45,9 +48,9 @@ public class Battle implements FightModel {
     @Override
     public void notifyObserver() {
         observer.updateView(msg, team1WarriorName, team2WarriorName);
-        //msg.delete(0, msg.length());
-        //team1WarriorName.delete(0, team1WarriorName.length());
-        //team2WarriorName.delete(0, team2WarriorName.length());
+        msg.delete(0, msg.length());
+        team1WarriorName.delete(0, team1WarriorName.length());
+        team2WarriorName.delete(0, team2WarriorName.length());
     }
 
     private String getRandomNameWarrior() {
@@ -213,10 +216,12 @@ public class Battle implements FightModel {
             case 0:
                 //Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
                 team1WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
+                notifyObserver();
                 break;
             case 1:
                 //Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
                 team2WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
+                notifyObserver();
                 break;
         }
     }
