@@ -1,11 +1,7 @@
 package model;
 
-import model.Warriors.Archer;
-import model.Warriors.Barbarian;
-import model.Warriors.Viking;
-import model.Warriors.Warrior;
-import view.FightObserver;
-
+import model.Warriors.*;
+import view.View;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,61 +9,48 @@ import java.util.Random;
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-public class Battle implements FightModel {
+public class ModelImpl implements Model {
+    private StringBuilder infoMessage;
+    private StringBuilder team1WarriorNameAndType;
+    private StringBuilder team2WarriorNameAndType;
 
-    private FightObserver observer;
+    private View observer;
     private Random random;
-
-    private StringBuilder msg;
-    private StringBuilder team1WarriorName;
-    private StringBuilder team2WarriorName;
-
     private String team1Name;
     private String team2Name;
     private List<Warrior> team1;
     private List<Warrior> team2;
-    private String[] warriorName = {"Adar", "Abner", "Alford", "Bennett", "Ward", "Wild",
+    private String[] randomWarriorName = {"Adar", "Abner", "Alford", "Bennett", "Ward", "Wild",
             "Irk", "Kellen", "Odin"};
 
-
-    public Battle () {
+    public ModelImpl() {
         random = new Random();
         team1 = new ArrayList<>();
         team2 = new ArrayList<>();
-        msg = new StringBuilder(0);
-        team1WarriorName = new StringBuilder(0);
-        team2WarriorName = new StringBuilder(0);
+        infoMessage = new StringBuilder(0);
+        team1WarriorNameAndType = new StringBuilder(0);
+        team2WarriorNameAndType = new StringBuilder(0);
     }
 
-
     @Override
-    public void registerObserver(FightObserver o) {
+    public void registerObserver(View o) {
         observer = o;
     }
 
     @Override
     public void notifyObserver() {
-        observer.updateView(msg, team1WarriorName, team2WarriorName);
-        msg.delete(0, msg.length());
-        team1WarriorName.delete(0, team1WarriorName.length());
-        team2WarriorName.delete(0, team2WarriorName.length());
+        observer.updateView(infoMessage, team1WarriorNameAndType, team2WarriorNameAndType);
+        infoMessage.delete(0, infoMessage.length());
+        team1WarriorNameAndType.delete(0, team1WarriorNameAndType.length());
+        team2WarriorNameAndType.delete(0, team2WarriorNameAndType.length());
     }
 
     private String getRandomNameWarrior() {
-        int index = random.nextInt(warriorName.length);
-        return warriorName[index];
+        int index = random.nextInt(randomWarriorName.length);
+        return randomWarriorName[index];
     }
 
-    //возвращает true если только в одном из отрядов не осталось живых бойцов.
-    private boolean isAnyLoose(Squad crew1, Squad crew2) {
-        return (!crew1.hasAliveWarriors()) ^ (!crew2.hasAliveWarriors());
-    }
-
-    public boolean isTeamsNotEmpty() {
-        return ((team1.size() > 0) && (team2.size() > 0));
-    }
-
-    private int getRandomIndexWarriorTeam(Squad crew) {
+    private int getRandomWarriorIndex(Squad crew) {
         while (true) {
             int indexWarriorTeam = random.nextInt(crew.getTeamSize());
             if (crew.getTeamWarrior(indexWarriorTeam).isAlive()) {
@@ -76,19 +59,17 @@ public class Battle implements FightModel {
         }
     }
 
-    private void winnerIs(Squad crew1, Squad crew2) {
-        String winner;
-        String looser;
 
-        if (crew1.hasAliveWarriors()) {
-            winner = crew1.getName();
-            looser = crew2.getName();
-        } else {
-            winner = crew2.getName();
-            looser = crew1.getName();
-        }
+    public void startBattle() {
+        Squad squad1 = new Squad(team1Name, team1);
+        Squad squad2 = new Squad(team2Name, team2);
 
-        msg.append("Отряд ").append(winner).append(" победил, уничтожив отряд ").append(looser).append("\n");
+        infoMessage.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate()).append("\n");
+        notifyObserver();
+
+        startFight(squad1, squad2);
+
+        infoMessage.append("Бой продолжался: ").append(DataHelper.getFormattedDiff());
         notifyObserver();
     }
 
@@ -122,12 +103,12 @@ public class Battle implements FightModel {
         //если у обеих отрядов есть живые, то выбираем их рандомно
         if ((crew1.hasAliveWarriors()) && (crew2.hasAliveWarriors())) {
 
-            indexWarriorTeam1 = getRandomIndexWarriorTeam(crew1);
-            indexWarriorTeam2 = getRandomIndexWarriorTeam(crew2);
+            indexWarriorTeam1 = getRandomWarriorIndex(crew1);
+            indexWarriorTeam2 = getRandomWarriorIndex(crew2);
 
             crew1.getTeamWarrior(indexWarriorTeam1).attackingUnit(crew2.getTeamWarrior(indexWarriorTeam2));
 
-            msg.append(crew1.getTeamWarrior(indexWarriorTeam1).getClass().getSimpleName()).append(" ")
+            infoMessage.append(crew1.getTeamWarrior(indexWarriorTeam1).getClass().getSimpleName()).append(" ")
                     .append(crew1.getTeamWarrior(indexWarriorTeam1).getName()).append(" из отряда \"")
                     .append(crew1.getName()).append("\" нанёс ")
                     .append(crew2.getTeamWarrior(indexWarriorTeam2).getClass().getSimpleName())
@@ -139,38 +120,52 @@ public class Battle implements FightModel {
         }
     }
 
+    //возвращает true если только в одном из отрядов не осталось живых бойцов.
+    private boolean isAnyLoose(Squad crew1, Squad crew2) {
+        return (!crew1.hasAliveWarriors()) ^ (!crew2.hasAliveWarriors());
+    }
 
-    public void startBattle() {
-        Squad squad1 = new Squad(team1Name, team1);
-        Squad squad2 = new Squad(team2Name, team2);
+    private void winnerIs(Squad crew1, Squad crew2) {
+        String winner;
+        String looser;
 
-        msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate()).append("\n");
-        notifyObserver();
+        if (crew1.hasAliveWarriors()) {
+            winner = crew1.getName();
+            looser = crew2.getName();
+        } else {
+            winner = crew2.getName();
+            looser = crew1.getName();
+        }
 
-        startFight(squad1, squad2);
-
-        msg.append("Бой продолжался: ").append(DataHelper.getFormattedDiff());
+        infoMessage.append("Отряд ").append(winner).append(" победил, уничтожив отряд ").append(looser).append("\n");
         notifyObserver();
     }
 
+
+    @Override
+    public boolean isTeamsNotEmpty() {
+        return ((team1.size() > 0) && (team2.size() > 0));
+    }
+
+    @Override
     public void initNameTeams(String team1Name, String team2Name) {
         if (!team1Name.equals("")) {
             this.team1Name = team1Name;
-            msg.append("Название первого отряда: ").append(this.team1Name).append("\n");
+            infoMessage.append("Название первого отряда: ").append(this.team1Name).append("\n");
             notifyObserver();
         } else {
             this.team1Name = "England";
-            msg.append("Ничего не введено, указано название первого отряда по-умолчанию - England").append("\n");
+            infoMessage.append("Ничего не введено, указано название первого отряда по-умолчанию - England").append("\n");
             notifyObserver();
         }
 
         if ((!team2Name.equals("")) && (!team2Name.equals(this.team1Name))) {
             this.team2Name = team2Name;
-            msg.append("Название второго отряда: ").append(this.team2Name).append("\n");
+            infoMessage.append("Название второго отряда: ").append(this.team2Name).append("\n");
             notifyObserver();
         } else {
             this.team2Name = "France";
-            msg.append("Ничего не введено, либо указано имя первого отряда. Присвоено название второго отряда по-умолчанию - France")
+            infoMessage.append("Ничего не введено, либо указано имя первого отряда. Присвоено название второго отряда по-умолчанию - France")
                     .append("\n");
             notifyObserver();
         }
@@ -178,13 +173,10 @@ public class Battle implements FightModel {
 
     @Override
     public void initNameAndTypeWarriors(String nameWarriorArg, int indexTeamArg, int indexTypeWarriorArg) {
-        // реализовать передачу и обработку параметров в методе
         List<Warrior> currentTeam = null;
         String currentTeamName = "";
         String currentTypeWarrior = "";
-        String nameWarrior = nameWarriorArg; //parametr
-        //int indexTeam = indexTeamArg; //parametr
-        //int indexTypeWarrior = indexTypeWarriorArg; //parametr
+        String nameWarrior = nameWarriorArg;
 
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
 
@@ -216,11 +208,11 @@ public class Battle implements FightModel {
 
         switch (indexTeamArg) {
             case 0:
-                team1WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
+                team1WarriorNameAndType.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 notifyObserver();
                 break;
             case 1:
-                team2WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
+                team2WarriorNameAndType.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 notifyObserver();
                 break;
         }

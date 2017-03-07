@@ -1,7 +1,7 @@
 package view;
 
-import controller.FightController;
-import model.FightModel;
+import controller.Controller;
+import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,25 +9,22 @@ import java.awt.*;
 /**
  * Created by Gubanov Pavel on 19.12.16.
  */
-public class Gui extends JFrame implements FightObserver {
+public class ViewImpl extends JFrame implements View {
 
-    private FightController controller;
+    private Controller controller;
     private JButton buttonSetTeamNames;
     private JButton buttonAddWarrior;
     private JButton buttonStartFight;
-    private static JTextArea fieldFirstNameTeam;
-    private static JTextArea fieldSecondNameTeam;
-    private static JTextArea fieldNameWarrior;
-    private static TextArea fieldFirstTeamWarriorList;
-    private static TextArea fieldSecondTeamWarriorList;
-    private static JComboBox<String> comboBoxTeam;
-    private static JComboBox<String> comboBoxTypeWarrior;
-    private static TextArea log;
-    private static StringBuilder strBldrFirstWarriorList = new StringBuilder();
-    private static StringBuilder strBldrSecondWarriorList = new StringBuilder();
-    private static StringBuilder strBldrLog = new StringBuilder();
+    private JTextArea fieldFirstNameTeam;
+    private JTextArea fieldSecondNameTeam;
+    private JTextArea fieldNameWarrior;
+    private TextArea fieldFirstTeamWarriorList;
+    private TextArea fieldSecondTeamWarriorList;
+    private JComboBox<String> comboBoxTeam;
+    private JComboBox<String> comboBoxTypeWarrior;
+    private TextArea log;
 
-    public Gui(FightController controller, FightModel model) {
+    public ViewImpl(Controller controller, Model model) {
         super("Приложение \"Битва\"");
         this.controller = controller;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -40,9 +37,9 @@ public class Gui extends JFrame implements FightObserver {
 
     private void initComponents() {
 
+        JLabel labelWarriorName = new JLabel("Имя война");
         buttonSetTeamNames = new JButton("Задать имена командам");
         buttonStartFight = new JButton("Начать битву");
-        JLabel labelWarriorName = new JLabel("Имя война");
         buttonAddWarrior = new JButton("Добавить война в отряд");
         fieldFirstNameTeam = new JTextArea("Название первой команды", 2, 20);
         fieldSecondNameTeam = new JTextArea("Название второй команды", 2, 20);
@@ -93,14 +90,13 @@ public class Gui extends JFrame implements FightObserver {
 
     private void addListeners() {
         buttonSetTeamNames.addActionListener(e -> {
-            controller.initNameTeams(fieldFirstNameTeam.getText(), fieldSecondNameTeam.getText());
+            controller.initNameTeams(getNameFirstTeam(), getNameSecondTeam());
             buttonSetTeamNames.setEnabled(false);
             buttonAddWarrior.setEnabled(true);
         });
 
         buttonAddWarrior.addActionListener(e -> {
-            controller.initNameAndTypeWarriors(fieldNameWarrior.getText(), comboBoxTeam.getSelectedIndex(),
-                    comboBoxTypeWarrior.getSelectedIndex());
+            controller.initNameAndTypeWarriors(getNameWarrior(), getTeamIndex(), getTypeWarriorIndex());
             if (controller.isTeamsNotEmpty()) {
                 buttonStartFight.setEnabled(true);
             }
@@ -113,36 +109,25 @@ public class Gui extends JFrame implements FightObserver {
         });
     }
 
-    private String getFieldFirstNameTeam() {
+    private String getNameFirstTeam() {
         return fieldFirstNameTeam.getText();
     }
 
-    private String getFieldSecondNameTeam() {
+    private String getNameSecondTeam() {
         return fieldSecondNameTeam.getText();
     }
 
-    static int getComboBoxTeam() {
+    private int getTeamIndex() {
         return comboBoxTeam.getSelectedIndex();
     }
 
-    static int getComboBoxTypeWarrior() {
+    private int getTypeWarriorIndex() {
         return comboBoxTypeWarrior.getSelectedIndex();
     }
 
-    static String getFieldNameWarrior() {
+    private String getNameWarrior() {
         return fieldNameWarrior.getText();
     }
-
-    static void setFieldFirstTeamWarriorList(String text1, String text2) {
-        strBldrFirstWarriorList.append(text1).append(" ").append(text2).append("\n");
-        fieldFirstTeamWarriorList.setText(strBldrFirstWarriorList.toString());
-    }
-
-    static void setFieldSecondTeamWarriorList(String text1, String text2) {
-        strBldrSecondWarriorList.append(text1).append(" ").append(text2).append("\n");
-        fieldSecondTeamWarriorList.setText(strBldrSecondWarriorList.toString());
-    }
-
 
     @Override
     public void updateView(StringBuilder msg, StringBuilder team1WarriorName, StringBuilder team2WarriorName) {

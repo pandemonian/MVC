@@ -1,21 +1,15 @@
 package controller;
 
-import model.FightModel;
-import model.Warriors.Warrior;
-import view.Gui;
-
-import java.util.List;
+import model.Model;
 
 /**
  * Created by Gubanov Pavel on 13.02.17.
  */
-public class FightControllerImpl implements FightController {
-    private FightModel model;
-    //private Gui view;
+public class ControllerImpl implements Controller {
+    private Model model;
 
-    public FightControllerImpl(FightModel model) {
+    public ControllerImpl(Model model) {
         this.model = model;
-        //this.view = view;
     }
 
     @Override

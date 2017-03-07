@@ -1,7 +1,6 @@
-import controller.FightController;
-import controller.FightControllerImpl;
-import model.Battle;
-import view.Gui;
+import controller.*;
+import model.ModelImpl;
+import view.ViewImpl;
 
 /**
  * Created by Gubanov Pavel on 25.11.16.
@@ -9,8 +8,8 @@ import view.Gui;
 public class Run {
 
     public static void main(String[] args) {
-        Battle battle = new Battle();
-        FightController controller = new FightControllerImpl(battle);
-        Gui gui = new Gui(controller, battle);
+        ModelImpl modelImpl = new ModelImpl();
+        Controller controller = new ControllerImpl(modelImpl);
+        new ViewImpl(controller, modelImpl);
     }
 }
