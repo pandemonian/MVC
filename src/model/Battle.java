@@ -88,7 +88,7 @@ public class Battle implements FightModel {
             looser = crew1.getName();
         }
 
-        msg.append("Отряд ").append(winner).append(" победил, уничтожив отряд ").append(looser);
+        msg.append("Отряд ").append(winner).append(" победил, уничтожив отряд ").append(looser).append("\n");
         notifyObserver();
     }
 
@@ -132,8 +132,9 @@ public class Battle implements FightModel {
                     .append(crew1.getName()).append("\" нанёс ")
                     .append(crew2.getTeamWarrior(indexWarriorTeam2).getClass().getSimpleName())
                     .append("`у ").append(crew2.getTeamWarrior(indexWarriorTeam2).getName()).append(" из отряда \"")
-                    .append(crew2.getName()).append("\" ").append("\" ")
-                    .append(String.valueOf(crew1.getTeamWarrior(indexWarriorTeam1).getDamage())).append(" единиц урона!");
+                    .append(crew2.getName()).append("\" ")/*.append("\" ")*/
+                    .append(String.valueOf(crew1.getTeamWarrior(indexWarriorTeam1).getDamage())).append(" единиц урона!")
+                    .append("\n");
             notifyObserver();
         }
     }
@@ -143,7 +144,7 @@ public class Battle implements FightModel {
         Squad squad1 = new Squad(team1Name, team1);
         Squad squad2 = new Squad(team2Name, team2);
 
-        msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate());
+        msg.append("Битва началась!!! ").append(DataHelper.getFormattedStartDate()).append("\n");
         notifyObserver();
 
         startFight(squad1, squad2);
@@ -159,7 +160,7 @@ public class Battle implements FightModel {
             notifyObserver();
         } else {
             this.team1Name = "England";
-            msg.append("Ничего не введено, указано название первого отряда по-умолчанию - England");
+            msg.append("Ничего не введено, указано название первого отряда по-умолчанию - England").append("\n");
             notifyObserver();
         }
 
@@ -169,7 +170,8 @@ public class Battle implements FightModel {
             notifyObserver();
         } else {
             this.team2Name = "France";
-            msg.append("Ничего не введено, либо указано имя первого отряда. Присвоено название второго отряда по-умолчанию - France");
+            msg.append("Ничего не введено, либо указано имя первого отряда. Присвоено название второго отряда по-умолчанию - France")
+                    .append("\n");
             notifyObserver();
         }
     }
@@ -214,12 +216,10 @@ public class Battle implements FightModel {
 
         switch (indexTeamArg) {
             case 0:
-                //Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
                 team1WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 notifyObserver();
                 break;
             case 1:
-                //Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
                 team2WarriorName.append(nameWarrior).append(" ").append(currentTypeWarrior).append("\n");
                 notifyObserver();
                 break;
